@@ -1,0 +1,15 @@
+<?php require_once('idiorm.php');
+    
+/*
+ * Add your hostname to the array below if you want to run 
+ * this script locally in your development environment.
+ * Donot forget to change your database credentials.
+ */
+
+$localenv = array('yipl');
+
+ORM::configure('mysql:host=localhost;dbname=xxx');
+ORM::configure('username', 'xxx');
+ORM::configure('password', 'xxx');
+ORM::configure('logging', true);
+

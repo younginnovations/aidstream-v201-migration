@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DATABASE_NAME='AD-2015-7-13'
-DATABASE_USER='root'
-DATABASE_PASSWORD='kriti'
+DATABASE_NAME='xxx'
+DATABASE_USER='xxx'
+DATABASE_PASSWORD='xxx'
 
 echo -e "Running SQL Migrations\n"
 
@@ -18,6 +18,6 @@ php scripts/main_migration.php
 php scripts/activity_website_migration.php
 php scripts/contact_migration.php
 php scripts/location_coordinates_migration.php
-#php activity_status_to_draft.php
+# php activity_status_to_draft.php
 
 echo -e "All Migrations Complete"
