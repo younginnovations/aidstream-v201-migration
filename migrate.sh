@@ -18,6 +18,8 @@ php scripts/main_migration.php
 php scripts/activity_website_migration.php
 php scripts/contact_migration.php
 php scripts/location_coordinates_migration.php
+php scripts/activity_description_migration.php
+php scripts/activity_participating_org_migration.php
 # php activity_status_to_draft.php
 
 echo -e "All Migrations Complete"
