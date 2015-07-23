@@ -13,49 +13,66 @@ foreach ($activityDescriptions as $activityDescription) {
     $xml_lang = $activityDescription->{"@xml_lang"};
 
     if(!isset($descriptions[$activity_id])) {
-        $descriptions[$activity_id] = [];
+        $descriptions[$activity_id] = array();
     }
     if(!isset($descriptions[$activity_id][$type])) {
-        $descriptions[$activity_id][$type] = [];
+        $descriptions[$activity_id][$type] = array();
+    }
+    if(trim($xml_lang) == "") {
+      $xml_lang = "-1";
+    }
+    if(!isset($descriptions[$activity_id][$type][$xml_lang])) {
+      $descriptions[$activity_id][$type][$xml_lang] = array();
     }
 
-    if(!isset($descriptions[$activity_id][$type][$xml_lang])) {
-        $descriptions[$activity_id][$type][$xml_lang] = [];
-    }
-    
-    $descriptions[$activity_id][$type][$xml_lang][$activityDescription->id] = array($activityDescription->text, $activityDescription->{"@xml_lang"});
+    $descriptions[$activity_id][$type][$xml_lang][$activityDescription->id] = $activityDescription->text;
 }
+
+
 
 $rowsForCommit = 150;
 $count = 0;
-foreach ($descriptions as $activity_id=>$descriptionsByTypes) {
-    foreach ($descriptionsByTypes as $type => $descriptionsText) {
-        foreach ($descriptionsText as $xml_lang => $descriptionNar) {
-            if($count == 0) ORM::get_db()->beginTransaction();
-            $activityDescriptionNarrative = ORM::for_table($to)->create();
-            $description_ids = array_keys($descriptionNar);
-            $activityDescriptionNarrative->id = "";
-            $activityDescriptionNarrative->description_id = $description_ids[0];
-            $content = "";
-            $lang = "";
-            foreach($descriptionNar as $description_id=>$description_meta) {
-                $content .= $description_meta[0];
-                $lang = $description_meta[1];
-            }
-
-            $activityDescriptionNarrative->text = $content;
-            $activityDescriptionNarrative->{"@xml_lang"} = $lang;
-            $activityDescriptionNarrative->save();
-            if(array_slice($description_ids,1))
-                deleteData($from, array_slice($description_ids,1));
-            $count++;
-            if($count === $rowsForCommit) {
-                $count = 0;
-                ORM::get_db()->commit();
-            } 
-        }
+foreach ($descriptions as $activity_id=>$descriptionsByTypes)
+{
+  foreach ($descriptionsByTypes as $type => $descriptionsLangArray)
+  {
+    $descriptionIds = array();
+    $primary_description_id = 0;
+    foreach($descriptionsLangArray as $_ => $descriptionIdArray)
+    {
+      $descriptionIds = array_merge($descriptionIds, array_keys($descriptionIdArray));
     }
+    $primary_description_id = $descriptionIds[0];
+
+    foreach($descriptionsLangArray as $xml_lang => $descriptionIdArray)
+    {
+      if($count == 0) ORM::get_db()->beginTransaction();
+      $activityDescriptionNarrative = ORM::for_table($to)->create();
+      $activityDescriptionNarrative->id = "";
+      $activityDescriptionNarrative->description_id = $primary_description_id;
+      if($xml_lang == -1) $xml_lang = "";
+      $activityDescriptionNarrative->{"@xml_lang"} = $xml_lang;
+      $content = "";
+      foreach($descriptionIdArray as $_=>$descriptionText)
+      {
+          $content .= $descriptionText . ";";
+      }
+      $activityDescriptionNarrative->text = $content;
+      $activityDescriptionNarrative->save();
+      $count++;
+      if($count === $rowsForCommit)
+      {
+        $count = 0;
+        ORM::get_db()->commit();
+      }
+    }
+    if(array_slice($descriptionIds,1))
+    {
+        deleteData($from, array_slice($descriptionIds,1));
+    }
+  }
 }
+
 if($count !==0 ) {
     ORM::get_db()->commit();
 }
