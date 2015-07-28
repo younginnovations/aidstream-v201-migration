@@ -20,6 +20,8 @@ php scripts/contact_migration.php
 php scripts/location_coordinates_migration.php
 php scripts/activity_description_migration.php
 php scripts/activity_participating_org_migration.php
+php scripts/activity_other_identifier_migration.php
+php scripts/activity_sector_migration.php
 # php activity_status_to_draft.php
 
 echo -e "All Migrations Complete"
