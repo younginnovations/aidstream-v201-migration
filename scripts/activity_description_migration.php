@@ -6,7 +6,7 @@ $to = 'iati_description/narrative';
 
 $activityDescriptions = ORM::for_table($from)->order_by_asc('activity_id', '@type')->find_many();
 
-$descriptions = [];
+$descriptions = array();
 foreach ($activityDescriptions as $activityDescription) {
     $activity_id = $activityDescription->activity_id;
     $type = $activityDescription->{"@type"};
