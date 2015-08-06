@@ -25,3 +25,5 @@ php scripts/activity_sector_migration.php
 # php activity_status_to_draft.php
 
 echo -e "All Migrations Complete"
+
+mysql -u $DATABASE_USER -p$DATABASE_PASSWORD $DATABASE_NAME < sql/update.sql
