@@ -1,3 +1,7 @@
+This repo was setup for the Upgrade and Migration of AidStream IATI version to 2.01. Any further issues regarding AidStream are to be reported in https://github.com/younginnovations/aidstream
+
+## Deprecated
+
 # AidStream Migration from IATI Standard v1.05 to v2.01
 
 ## What this script does?
